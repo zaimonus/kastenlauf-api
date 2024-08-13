@@ -2,6 +2,7 @@ from collections.abc import AsyncGenerator
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
+import subprocess
 import pytest
 
 from dotenv import load_dotenv
@@ -18,8 +19,15 @@ def anyio_backend():
 
 
 @pytest.fixture(scope="session", autouse=True)
-async def test_env() -> None:
+async def test_env() -> AsyncGenerator[None]:
     load_dotenv(".dev.env", override=True)
+    subprocess.call(
+        "docker compose -f docker-compose.dev.yaml up -d", shell=True
+    )
+    yield
+    subprocess.call(
+        "docker compose -f docker-compose.dev.yaml down", shell=True
+    )
 
 
 @pytest.fixture
