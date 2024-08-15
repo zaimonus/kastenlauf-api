@@ -1,6 +1,5 @@
 from beanie import PydanticObjectId
 from beanie.operators import Set
-from beanie.exceptions import DocumentNotFound
 from fastapi import APIRouter, HTTPException
 
 from app.models.team import TeamBase, TeamDocument, TeamResponse
@@ -27,9 +26,8 @@ async def update(id: PydanticObjectId, team: TeamBase) -> TeamResponse:
 
 @router.delete("/{id}")
 async def delete(id: PydanticObjectId) -> TeamResponse:
-    try:
-        team = await TeamDocument.get(id)
-        await team.delete()
-        return team
-    except DocumentNotFound:
+    team = await TeamDocument.get(id)
+    if team is None:
         raise HTTPException(status_code=404, detail="Team not found")
+    await team.delete()
+    return team

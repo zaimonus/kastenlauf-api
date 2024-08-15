@@ -13,7 +13,7 @@ class Arrival(BaseModel):
 
 
 class EventBase(BaseModel):
-    name: str
+    name: str = Field(default="")
     arrivals: list[Arrival] = Field(default_factory=list)
 
 

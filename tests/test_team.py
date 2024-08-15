@@ -11,40 +11,41 @@ async def test_get_team(
 ) -> None:
     response = await client.get(f"/teams/{create_team.id}")
     assert response.status_code == 200
-    # TODO assert response json
+    assert response.json() == {
+        "name": create_team.name,
+        "member": create_team.member,
+        "id": str(create_team.id),
+    }
 
 
-@pytest.mark.xfail
 @pytest.mark.anyio
 async def test_patch_team_change_name(
     client: AsyncClient, create_team: TeamDocument
 ) -> None:
-    # TODO add request content
-    response = await client.patch(f"/teams/{create_team.id}")
+    new_name = "NewTestName"
+    data = {"name": new_name}
+    response = await client.patch(f"/teams/{create_team.id}", json=data)
     assert response.status_code == 200
-    # TODO assert response json
+    assert response.json() == {
+        "name": new_name,
+        "member": create_team.member,
+        "id": str(create_team.id),
+    }
 
 
-@pytest.mark.xfail
 @pytest.mark.anyio
-async def test_patch_team_add_members(
+async def test_patch_team_change_members(
     client: AsyncClient, create_team: TeamDocument
 ) -> None:
-    # TODO add request content
-    response = await client.patch(f"/teams/{create_team.id}")
+    new_members = "NewMember1, NewMember2"
+    data = {"member": new_members}
+    response = await client.patch(f"/teams/{create_team.id}", json=data)
     assert response.status_code == 200
-    # TODO assert response json
-
-
-@pytest.mark.xfail
-@pytest.mark.anyio
-async def test_patch_team_remove_members(
-    client: AsyncClient, create_team: TeamDocument
-) -> None:
-    # TODO add request content
-    response = await client.patch(f"/teams/{create_team.id}")
-    assert response.status_code == 200
-    # TODO assert response json
+    assert response.json() == {
+        "name": create_team.name,
+        "member": new_members,
+        "id": str(create_team.id),
+    }
 
 
 @pytest.mark.anyio
@@ -53,6 +54,11 @@ async def test_delete_team(
 ) -> None:
     response = await client.delete(f"/teams/{create_team.id}")
     assert response.status_code == 200
+    assert response.json() == {
+        "name": create_team.name,
+        "member": create_team.member,
+        "id": str(create_team.id),
+    }
 
 
 @pytest.mark.anyio

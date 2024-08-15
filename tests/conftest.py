@@ -45,7 +45,7 @@ async def client(lifespan_app: FastAPI) -> AsyncGenerator[AsyncClient]:
 
 @pytest.fixture
 async def create_team() -> AsyncGenerator[TeamDocument]:
-    team = TeamDocument(name="TestTeam", members=["Mem1", "Mem2"])
+    team = TeamDocument(name="TestTeam", members="Mem1, Mem2")
     await team.save()
     yield team
     await team.delete()
@@ -54,7 +54,7 @@ async def create_team() -> AsyncGenerator[TeamDocument]:
 @pytest.fixture
 async def create_checkpoint() -> AsyncGenerator[CheckpointDocument]:
     checkpoint = CheckpointDocument(
-        name="TestCheckpoint", members=["G1", "G2"]
+        name="TestCheckpoint", guards="G1, G2"
     )
     await checkpoint.save()
     yield checkpoint

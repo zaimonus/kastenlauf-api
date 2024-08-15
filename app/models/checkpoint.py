@@ -3,8 +3,8 @@ from pydantic import BaseModel, Field
 
 
 class CheckpointBase(BaseModel):
-    name: str
-    guards: list[str] = Field(default_factory=list)
+    name: str = Field(default="")
+    guards: str = Field(default="")
 
 
 class CheckpointDocument(CheckpointBase, Document):
