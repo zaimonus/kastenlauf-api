@@ -15,6 +15,5 @@ async def get() -> list[TeamResponse]:
 @router.post("")
 async def post(team: TeamBase) -> TeamResponse:
     doc = TeamDocument(name=team.name, member=team.member)
-    print(doc)
     await doc.insert()
     return doc
