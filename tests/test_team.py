@@ -12,9 +12,9 @@ async def test_get_team(
     response = await client.get(f"/teams/{create_team.id}")
     assert response.status_code == 200
     assert response.json() == {
+        "id": str(create_team.id),
         "name": create_team.name,
         "member": create_team.member,
-        "id": str(create_team.id),
     }
 
 
@@ -27,9 +27,9 @@ async def test_patch_team_change_name(
     response = await client.patch(f"/teams/{create_team.id}", json=data)
     assert response.status_code == 200
     assert response.json() == {
+        "id": str(create_team.id),
         "name": new_name,
         "member": create_team.member,
-        "id": str(create_team.id),
     }
 
 
@@ -42,9 +42,9 @@ async def test_patch_team_change_members(
     response = await client.patch(f"/teams/{create_team.id}", json=data)
     assert response.status_code == 200
     assert response.json() == {
+        "id": str(create_team.id),
         "name": create_team.name,
         "member": new_members,
-        "id": str(create_team.id),
     }
 
 
@@ -55,9 +55,9 @@ async def test_delete_team(
     response = await client.delete(f"/teams/{create_team.id}")
     assert response.status_code == 200
     assert response.json() == {
+        "id": str(create_team.id),
         "name": create_team.name,
         "member": create_team.member,
-        "id": str(create_team.id),
     }
 
 
