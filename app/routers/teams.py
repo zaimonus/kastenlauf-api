@@ -1,18 +1,20 @@
 from fastapi import APIRouter
 
-from app.models.team import TeamBase, TeamResponse
+from app.models.team import TeamBase, TeamDocument, TeamResponse
 
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 async def get() -> list[TeamResponse]:
-    # TODO implement
-    pass
+    teams = await TeamDocument.find().to_list()
+    return teams
 
 
-@router.post("/")
+@router.post("")
 async def post(team: TeamBase) -> TeamResponse:
-    # TODO implement
-    pass
+    doc = TeamDocument(name=team.name, member=team.member)
+    print(doc)
+    await doc.insert()
+    return doc
