@@ -1,26 +1,39 @@
 from beanie import PydanticObjectId
-from fastapi import APIRouter
+from beanie.operators import Set
+from fastapi import APIRouter, HTTPException
 
-from app.models.checkpoint import CheckpointBase, CheckpointResponse
+from app.models.checkpoint import (
+    CheckpointBase,
+    CheckpointDocument,
+    CheckpointResponse,
+)
 
 router = APIRouter()
 
 
 @router.get("/{id}")
 async def get(id: PydanticObjectId) -> CheckpointResponse:
-    # TODO implement
-    pass
+    checkpoint = await CheckpointDocument.get(id)
+    if checkpoint is None:
+        raise HTTPException(status_code=404, detail="Checkpoint not found")
+    return checkpoint
 
 
 @router.patch("/{id}")
 async def update(
     id: PydanticObjectId, checkpoint: CheckpointBase
 ) -> CheckpointResponse:
-    # TODO implement
-    pass
+    doc = await CheckpointDocument.get(id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Checkpoint not found")
+    await doc.update(Set(checkpoint.model_dump(exclude_unset=True)))
+    return doc
 
 
 @router.delete("/{id}")
 async def delete(id: PydanticObjectId) -> CheckpointResponse:
-    # TODO implement
-    pass
+    checkpoint = await CheckpointDocument.get(id)
+    if checkpoint is None:
+        raise HTTPException(status_code=404, detail="Checkpoint not found")
+    await checkpoint.delete()
+    return checkpoint
