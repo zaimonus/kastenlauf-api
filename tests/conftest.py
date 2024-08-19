@@ -53,9 +53,7 @@ async def create_team() -> AsyncGenerator[TeamDocument]:
 
 @pytest.fixture
 async def create_checkpoint() -> AsyncGenerator[CheckpointDocument]:
-    checkpoint = CheckpointDocument(
-        name="TestCheckpoint", guards="G1, G2"
-    )
+    checkpoint = CheckpointDocument(name="TestCheckpoint", guards="G1, G2")
     await checkpoint.save()
     yield checkpoint
     await checkpoint.delete()
@@ -81,3 +79,21 @@ async def create_arrival(
     await event.save()
     yield arrival
     await event.delete()
+
+
+@pytest.fixture
+async def cleanup_teams() -> AsyncGenerator[None]:
+    yield
+    await TeamDocument.delete_all()
+
+
+@pytest.fixture
+async def cleanup_checkpoints() -> AsyncGenerator[None]:
+    yield
+    await CheckpointDocument.delete_all()
+
+
+@pytest.fixture
+async def cleanup_events() -> AsyncGenerator[None]:
+    yield
+    await EventDocument.delete_all()

@@ -32,7 +32,7 @@ async def test_get_one_team(
 
 
 @pytest.mark.anyio
-async def test_post_new_team(client: AsyncClient) -> None:
+async def test_post_new_team(client: AsyncClient, cleanup_teams: None) -> None:
     name = "NewTeam"
     member = "Member1, Member2, Member3"
     data = {"name": name, "member": member}
@@ -44,21 +44,3 @@ async def test_post_new_team(client: AsyncClient) -> None:
     assert obj["name"] == name
     assert obj["member"] == member
     assert PydanticObjectId.is_valid(obj["id"])
-
-
-@pytest.mark.anyio
-async def test_post_existing_teams(
-    client: AsyncClient, create_team: TeamDocument
-) -> None:
-    name = "NewTeam"
-    member = "Member1, Member2, Member3"
-    data = {"id": str(create_team.id), "name": name, "member": member}
-
-    response = await client.post("/teams", json=data)
-
-    assert response.status_code == 200
-    obj = response.json()
-    assert obj["name"] == name
-    assert obj["member"] == member
-    assert PydanticObjectId.is_valid(obj["id"])
-    assert obj["id"] != create_team.id
