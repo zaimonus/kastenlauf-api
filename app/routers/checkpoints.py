@@ -1,6 +1,10 @@
 from fastapi import APIRouter
 
-from app.models.checkpoint import CheckpointBase, CheckpointResponse
+from app.models.checkpoint import (
+    CheckpointBase,
+    CheckpointDocument,
+    CheckpointResponse,
+)
 
 
 router = APIRouter()
@@ -8,11 +12,12 @@ router = APIRouter()
 
 @router.get("")
 async def get() -> list[CheckpointResponse]:
-    # TODO implement
-    pass
+    checkpoints = await CheckpointDocument.find().to_list()
+    return checkpoints
 
 
 @router.post("")
 async def post(checkpoint: CheckpointBase) -> CheckpointResponse:
-    # TODO implement
-    pass
+    doc = CheckpointDocument(name=checkpoint.name, guards=checkpoint.guards)
+    await doc.insert()
+    return doc
