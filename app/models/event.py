@@ -1,14 +1,11 @@
 from datetime import datetime
-from beanie import Document, Link, PydanticObjectId
+from beanie import Document, PydanticObjectId
 from pydantic import BaseModel, Field
-
-from app.models.checkpoint import CheckpointDocument
-from app.models.team import TeamDocument
 
 
 class Arrival(BaseModel):
-    team: Link[TeamDocument]
-    checkpoint: Link[CheckpointDocument]
+    team: PydanticObjectId
+    checkpoint: PydanticObjectId
     at: datetime = Field(default_factory=datetime.now)
 
 
