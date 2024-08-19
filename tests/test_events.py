@@ -29,7 +29,9 @@ async def test_get_one_event(
 
 
 @pytest.mark.anyio
-async def test_post_new_event(client: AsyncClient) -> None:
+async def test_post_new_event(
+    client: AsyncClient, cleanup_events: None
+) -> None:
     name = "NewEvent"
     arrivals = []
     data = {"name": name, "arrivals": arrivals}

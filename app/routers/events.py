@@ -8,8 +8,8 @@ router = APIRouter()
 
 @router.get("")
 async def get() -> list[EventResponse]:
-    teams = await EventDocument.find().to_list()
-    return teams
+    events = await EventDocument.find().to_list()
+    return events
 
 
 @router.post("")
